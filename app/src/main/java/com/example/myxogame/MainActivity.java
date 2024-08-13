@@ -4,16 +4,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.myxogame.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
@@ -24,13 +18,13 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
     ActivityMainBinding binding;
     private final List<int[]> combinationList = new ArrayList<>();
-    private int[] boxPositions = {0, 0, 0, 0, 0, 0, 0, 0, 0}; // 9 zero
+    private int[] boxPositions = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     private int playerTurn = 1;
     private int totalSelectedBoxes = 1;
-    private boolean playWithComputer = false; // New variable to check game mode
+    private boolean playWithComputer = false;
+    private String difficultyLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Define winning combinations
         combinationList.add(new int[]{0, 1, 2});
         combinationList.add(new int[]{3, 4, 5});
         combinationList.add(new int[]{6, 7, 8});
@@ -50,18 +43,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         combinationList.add(new int[]{2, 4, 6});
         combinationList.add(new int[]{0, 4, 8});
 
-        // Retrieve player names and game mode
         String getPlayerOneName = getIntent().getStringExtra("playerOne");
         String getPlayerTwoName = getIntent().getStringExtra("playerTwo");
         String gameMode = getIntent().getStringExtra("gameMode");
+        difficultyLevel = getIntent().getStringExtra("difficultyLevel");
 
         binding.playerOneName.setText(getPlayerOneName);
         binding.playerTwoName.setText(getPlayerTwoName);
 
-        // Check if game mode is against computer
         if ("computer".equals(gameMode)) {
             playWithComputer = true;
-            binding.playerTwoName.setText("Computer"); // Change player 2 name to "Computer"
+            binding.playerTwoName.setText("Computer");
         }
 
         setupClickListeners();
@@ -141,6 +133,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+    private boolean checkResults() {
+        boolean response = false;
+
+        for (int i = 0; i < combinationList.size(); i++) {
+            final int[] combination = combinationList.get(i);
+
+            if (boxPositions[combination[0]] == playerTurn && boxPositions[combination[1]] == playerTurn &&
+                    boxPositions[combination[2]] == playerTurn) {
+                response = true;
+            }
+        }
+        return response;
+    }
 
     private void performAction(ImageView imageView, int selectedBoxPosition) {
         boxPositions[selectedBoxPosition] = playerTurn;
@@ -188,51 +193,94 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void computerPlay() {
-        // Simple AI: Random move selection for computer
-        Random random = new Random();
-        int selectedBoxPosition;
-        ImageView imageView;
+        int selectedBoxPosition = -1;
+        ImageView imageView = null;
 
-        // Find a random selectable box
-        do {
-            selectedBoxPosition = random.nextInt(9);
+        if ("easy".equals(difficultyLevel)) {
+            selectedBoxPosition = getRandomMove();
+        } else if ("medium".equals(difficultyLevel)) {
+            selectedBoxPosition = getMediumMove();
+        } else if ("hard".equals(difficultyLevel)) {
+            selectedBoxPosition = getHardMove();
+        }
+
+        if (selectedBoxPosition != -1) {
             imageView = getImageViewByPosition(selectedBoxPosition);
-        } while (!isBoxSelectable(selectedBoxPosition));
-
-        // Delay for better UX to simulate computer thinking
-        ImageView finalImageView = imageView;
-        int finalSelectedBoxPosition = selectedBoxPosition;
-        imageView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                performAction(finalImageView, finalSelectedBoxPosition);
-            }
-        }, 500); // 500ms delay
+            ImageView finalImageView = imageView;
+            int finalSelectedBoxPosition = selectedBoxPosition;
+            imageView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    performAction(finalImageView, finalSelectedBoxPosition);
+                }
+            }, 500); // 500ms delay
+        }
     }
 
-    private ImageView getImageViewByPosition(int position) {
-        switch (position) {
-            case 0:
-                return binding.image1;
-            case 1:
-                return binding.image2;
-            case 2:
-                return binding.image3;
-            case 3:
-                return binding.image4;
-            case 4:
-                return binding.image5;
-            case 5:
-                return binding.image6;
-            case 6:
-                return binding.image7;
-            case 7:
-                return binding.image8;
-            case 8:
-                return binding.image9;
-            default:
-                return null;
+    private int getRandomMove() {
+        Random random = new Random();
+        int selectedBoxPosition;
+
+        do {
+            selectedBoxPosition = random.nextInt(9);
+        } while (!isBoxSelectable(selectedBoxPosition));
+
+        return selectedBoxPosition;
+    }
+
+    private int getMediumMove() {
+        int winningMove = getWinningMove(2); // Check if the player has a winning move
+        if (winningMove != -1) {
+            return winningMove;
+        } else {
+            return getRandomMove();
         }
+    }
+
+    private int getHardMove() {
+        int winningMove = getWinningMove(1); // Check if the computer can win
+        if (winningMove != -1) {
+            return winningMove;
+        }
+
+        int blockingMove = getWinningMove(2); // Check if the player has a winning move
+        if (blockingMove != -1) {
+            return blockingMove;
+        }
+
+        return getRandomMove();
+    }
+
+    private int getWinningMove(int player) {
+        for (int[] combination : combinationList) {
+            int count = 0;
+            int emptyPosition = -1;
+
+            for (int pos : combination) {
+                if (boxPositions[pos] == player) {
+                    count++;
+                } else if (boxPositions[pos] == 0) {
+                    emptyPosition = pos;
+                }
+            }
+
+            if (count == 2 && emptyPosition != -1) {
+                return emptyPosition;
+            }
+        }
+
+        return -1;
+    }
+
+    private boolean checkPlayerWin() {
+        for (int[] combination : combinationList) {
+            if (boxPositions[combination[0]] == playerTurn &&
+                    boxPositions[combination[1]] == playerTurn &&
+                    boxPositions[combination[2]] == playerTurn) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void changePlayerTurn(int currentPlayerTurn) {
@@ -242,29 +290,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             binding.playerOneLayout.setBackgroundResource(R.drawable.black_border);
             binding.playerTwoLayout.setBackgroundResource(R.drawable.white_box);
         } else {
-            binding.playerTwoLayout.setBackgroundResource(R.drawable.black_border);
-            binding.playerOneLayout.setBackgroundResource(R.drawable.white_box);
+            binding.playerOneLayout.setBackgroundResource(R.drawable.black_border);
+            binding.playerTwoLayout.setBackgroundResource(R.drawable.white_box);
         }
-    }
-
-    private boolean checkResults() {
-        boolean response = false;
-
-        for (int i = 0; i < combinationList.size(); i++) {
-            final int[] combination = combinationList.get(i);
-
-            if (boxPositions[combination[0]] == playerTurn && boxPositions[combination[1]] == playerTurn &&
-                    boxPositions[combination[2]] == playerTurn) {
-                response = true;
-            }
-        }
-        return response;
     }
 
     private boolean isBoxSelectable(int boxPosition) {
         return boxPositions[boxPosition] == 0;
     }
 
+    private ImageView getImageViewByPosition(int position) {
+        switch (position) {
+            case 0: return binding.image1;
+            case 1: return binding.image2;
+            case 2: return binding.image3;
+            case 3: return binding.image4;
+            case 4: return binding.image5;
+            case 5: return binding.image6;
+            case 6: return binding.image7;
+            case 7: return binding.image8;
+            case 8: return binding.image9;
+            default: return null;
+        }
+    }
     public void restartMatch() {
         boxPositions = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0}; // 9 zero
         playerTurn = 1;
@@ -279,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.image8.setImageResource(R.drawable.white_box);
         binding.image9.setImageResource(R.drawable.white_box);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

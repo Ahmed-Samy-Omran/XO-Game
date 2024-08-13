@@ -263,11 +263,11 @@
                     app:chipStrokeWidth="2dp" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/difficult"
+                    android:id="@+id/hard"
                     android:layout_width="wrap_content"
                     android:layout_height="58dp"
                     android:checkable="true"
-                    android:text="Difficult"
+                    android:text="Hard"
                     android:textColor="#7E7E80"
                     app:checkedIconVisible="true"
                     app:chipBackgroundColor="@color/white"

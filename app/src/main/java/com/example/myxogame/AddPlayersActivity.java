@@ -19,7 +19,7 @@ public class AddPlayersActivity extends AppCompatActivity {
     Button startGameButton;
     private Chip chipPlayWithComputer;
     private Chip chipPlayWithFriend;
-    private ChipGroup chipGroup;
+    private ChipGroup chipGroup, chipGroupDifficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,20 +27,6 @@ public class AddPlayersActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_players);
         initView();
-
-         // Default selection setup
-//        chipPlayWithComputer.setChecked(true); // Default the "Play with Player" option
-//
-//        // Handle ChipGroup selection changes
-//        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-//            if (checkedId == R.id.PlayWithComputer) {
-//                // Handle selection for "Play with Player"
-//                chipPlayWithFriend.setChecked(false);
-//            } else if (checkedId == R.id.PlayWithFriend) {
-//                // Handle selection for "Play with Friend"
-//                chipPlayWithComputer.setChecked(false);
-//            }
-//        });
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +41,6 @@ public class AddPlayersActivity extends AppCompatActivity {
                             .setMessage("Please enter both player names to start the game.")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Close the dialog
                                     dialog.dismiss();
                                 }
                             })
@@ -72,7 +57,6 @@ public class AddPlayersActivity extends AppCompatActivity {
                             .setMessage("Please select a game mode to start the game.")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Close the dialog
                                     dialog.dismiss();
                                 }
                             })
@@ -81,26 +65,47 @@ public class AddPlayersActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Determine game mode based on selected chip
                 String gameMode;
                 if (selectedChipId == R.id.PlayWithComputer) {
                     gameMode = "computer";
-                    playerTwoName = "Computer"; // Set player two name as "Computer" if playing with the computer
+                    playerTwoName = "Computer";
                 } else {
                     gameMode = "friend";
                 }
 
-                // Start the main activity with the selected game mode
+                String difficultyLevel = null;
+                if (gameMode.equals("computer")) {
+                    int selectedDifficultyId = chipGroupDifficulty.getCheckedChipId();
+                    if (selectedDifficultyId == -1) {
+                        new AlertDialog.Builder(AddPlayersActivity.this)
+                                .setTitle("Missing Selection")
+                                .setMessage("Please select a difficulty level to start the game.")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        return;
+                    }
+                    if (selectedDifficultyId == R.id.easy) {
+                        difficultyLevel = "easy";
+                    } else if (selectedDifficultyId == R.id.medium) {
+                        difficultyLevel = "medium";
+                    } else if (selectedDifficultyId == R.id.hard) {
+                        difficultyLevel = "hard";
+                    }
+                }
+
                 Intent intent = new Intent(AddPlayersActivity.this, MainActivity.class);
                 intent.putExtra("playerOne", playerOneName);
                 intent.putExtra("playerTwo", playerTwoName);
                 intent.putExtra("gameMode", gameMode);
+                intent.putExtra("difficultyLevel", difficultyLevel);
                 startActivity(intent);
             }
         });
-
-
-
     }
 
     public void initView() {
@@ -110,5 +115,6 @@ public class AddPlayersActivity extends AppCompatActivity {
         chipPlayWithComputer = findViewById(R.id.PlayWithComputer);
         chipPlayWithFriend = findViewById(R.id.PlayWithFriend);
         chipGroup = findViewById(R.id.chipGroupMode);
+        chipGroupDifficulty = findViewById(R.id.chipGroupDiffcult);
     }
 }
