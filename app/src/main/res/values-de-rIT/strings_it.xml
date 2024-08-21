@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MyXOGame</string>
+    <string name="open" translatable="false">apri\n</string>
+    <string name="close" translatable="false">chiudi\n</string>
+    <string name="enter_n_players_names">INSERISCI \n I NOMI DEI GIOCATORI</string>
+    <string name="enter_player_one_name">Inserisci il nome del primo giocatore</string>
+    <string name="enter_player_two_name">Inserisci il nome del secondo giocatore</string>
+    <string name="start_game">Inizia gioco</string>
+    <string name="computer">Computer</string>
+    <string name="friend">Amico</string>
+    <string name="easy">Facile</string>
+    <string name="medium">Medio</string>
+    <string name="hard">Difficile</string>
+    <string name="player_one">Giocatore Uno</string>
+    <string name="player_two">Giocatore Due</string>
+    <string name="results">Risultati</string>
+    <string name="start_again">Ricominciamo</string>
+    <string name="please_enter_both_player_names_to_start_the_game">Per favore, inserisci i nomi di entrambi i giocatori per iniziare il gioco.</string>
+    <string name="missing_information">Informazioni mancanti</string>
+    <string name="missing_selection">Selezione mancante</string>
+    <string name="please_select_a_game_mode_to_start_the_game">Per favore, seleziona una modalità di gioco per iniziare il gioco.</string>
+    <string name="please_select_a_difficulty_level_to_start_the_game">Per favore, seleziona un livello di difficoltà per iniziare il gioco.</string>
+    <string name="select_a_language">Seleziona una lingua</string>
+
+    <string name="is_a_winner"> è un vincitore!</string>
+    <string name="match_draw">Partita pareggiata</string>
+</resources>

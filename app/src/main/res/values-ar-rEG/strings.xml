@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MyXOGame</string>
+    <string name="open" translatable="false">افتح\n</string>
+    <string name="close" translatable="false">اقفل\n</string>
+    <string name="enter_n_players_names">اكتب \n أسامي اللاعبين</string>
+    <string name="enter_player_one_name">اكتب اسم اللاعب الأول</string>
+    <string name="enter_player_two_name">اكتب اسم اللاعب التاني</string>
+    <string name="start_game">ابدأ اللعبة</string>
+    <string name="computer">كمبيوتر</string>
+    <string name="friend">صاحبك</string>
+    <string name="easy">سهل</string>
+    <string name="medium">متوسط</string>
+    <string name="hard">صعب</string>
+    <string name="player_one">اللاعب الأول</string>
+    <string name="player_two">اللاعب التاني</string>
+    <string name="results">النتائج</string>
+    <string name="start_again">نبدأ من جديد</string>
+    <string name="please_enter_both_player_names_to_start_the_game">من فضلك اكتب أسامي اللاعبين عشان تبدأ اللعبة.</string>
+    <string name="missing_information">معلومات ناقصة</string>
+    <string name="missing_selection">اختيار ناقص</string>
+    <string name="please_select_a_game_mode_to_start_the_game">من فضلك اختار وضع اللعبة عشان تبدأ.</string>
+    <string name="please_select_a_difficulty_level_to_start_the_game">من فضلك اختار مستوى الصعوبة عشان تبدأ اللعبة.</string>
+    <string name="select_a_language">اختار لغة</string>
+    <string name="is_a_winner"> كسبان!</string>
+    <string name="match_draw">التعادل</string>
+</resources>

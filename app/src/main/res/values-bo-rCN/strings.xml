@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MyXOGame</string>
+    <string name="open" translatable="false">打开\n</string>
+    <string name="close" translatable="false">关闭\n</string>
+    <string name="enter_n_players_names">输入\n玩家名称</string>
+    <string name="enter_player_one_name">输入玩家一的名称</string>
+    <string name="enter_player_two_name">输入玩家二的名称</string>
+    <string name="start_game">开始游戏</string>
+    <string name="computer">电脑</string>
+    <string name="friend">朋友</string>
+    <string name="easy">简单</string>
+    <string name="medium">中等</string>
+    <string name="hard">困难</string>
+    <string name="player_one">玩家一</string>
+    <string name="player_two">玩家二</string>
+    <string name="results">结果</string>
+    <string name="start_again">重新开始</string>
+    <string name="please_enter_both_player_names_to_start_the_game">请输入两个玩家的名称以开始游戏。</string>
+    <string name="missing_information">信息缺失</string>
+    <string name="missing_selection">选择缺失</string>
+    <string name="please_select_a_game_mode_to_start_the_game">请选择游戏模式以开始游戏。</string>
+    <string name="please_select_a_difficulty_level_to_start_the_game">请选择难度级别以开始游戏。</string>
+    <string name="select_a_language">选择语言</string>
+    <string name="is_a_winner"> 是赢家！</string>
+    <string name="match_draw">平局</string>
+
+</resources>

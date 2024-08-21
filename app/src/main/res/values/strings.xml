@@ -1,5 +1,26 @@
-<resources>
-    <string name="app_name">MyXOGame</string>
-    <string name="open">open\n</string>
-    <string name="close">close\n</string>
-</resources>
+    <resources>
+        <string name="app_name" translatable="false">MyXOGame</string>
+        <string name="open">open\n</string>
+        <string name="close">close\n</string>
+        <string name="enter_n_players_names">ENTER \n PLAYERS NAMES</string>
+        <string name="enter_player_one_name">Enter player one name</string>
+        <string name="enter_player_two_name">Enter player two name</string>
+        <string name="start_game">Start Game</string>
+        <string name="computer">Computer</string>
+        <string name="friend">Friend</string>
+        <string name="easy">Easy</string>
+        <string name="medium">Medium</string>
+        <string name="hard">Hard</string>
+        <string name="player_one">Player One</string>
+        <string name="player_two">Player Two</string>
+        <string name="results">Results</string>
+        <string name="start_again">Start Again</string>
+        <string name="please_enter_both_player_names_to_start_the_game">Please enter both player names to start the game.</string>
+        <string name="missing_information">Missing Information</string>
+        <string name="missing_selection" >Missing Selection</string>
+        <string name="please_select_a_game_mode_to_start_the_game">Please select a game mode to start the game.</string>
+        <string name="please_select_a_difficulty_level_to_start_the_game">Please select a difficulty level to start the game.</string>
+        <string name="select_a_language">Select a Language</string>
+        <string name="is_a_winner">" is a Winner!"</string>
+        <string name="match_draw">Match Draw</string>
+    </resources>

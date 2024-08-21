@@ -1,18 +1,26 @@
 package com.example.myxogame;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.util.Locale;
 
 public class AddPlayersActivity extends AppCompatActivity {
     EditText playerOne, playerTwo;
@@ -20,13 +28,33 @@ public class AddPlayersActivity extends AppCompatActivity {
     private Chip chipPlayWithComputer;
     private Chip chipPlayWithFriend;
     private ChipGroup chipGroup, chipGroupDifficulty;
-
+    private SwitchMaterial musicSwitch;
+    ImageButton musicBackgroundBtn, languagesBtn;
+    boolean isSoundOn;
+    ProgressBar progressBar;
+        MediaPlayer mediaPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_players);
         initView();
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.game_start);
+
+         isSoundOn = false;
+        musicBackgroundBtn.setImageResource(R.drawable.volume_off); // Default icon (sound off)
+
+        musicBackgroundBtn.setOnClickListener(v -> {
+            if (isSoundOn) {
+                musicBackgroundBtn.setImageResource(R.drawable.volume_off);
+                MusicManager.stopMusic();
+            } else {
+                musicBackgroundBtn.setImageResource(R.drawable.sound_on);
+                MusicManager.playMusic(AddPlayersActivity.this);
+            }
+            isSoundOn = !isSoundOn; 
+        });
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,10 +63,9 @@ public class AddPlayersActivity extends AppCompatActivity {
                 String playerTwoName = playerTwo.getText().toString();
 
                 if (playerOneName.isEmpty() || playerTwoName.isEmpty()) {
-                    // Show an AlertDialog if either player name is empty
                     new AlertDialog.Builder(AddPlayersActivity.this)
-                            .setTitle("Missing Information")
-                            .setMessage("Please enter both player names to start the game.")
+                            .setTitle(R.string.missing_information)
+                            .setMessage(R.string.please_enter_both_player_names_to_start_the_game +"")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -51,10 +78,9 @@ public class AddPlayersActivity extends AppCompatActivity {
 
                 int selectedChipId = chipGroup.getCheckedChipId();
                 if (selectedChipId == -1) {
-                    // Show an AlertDialog if no game mode is selected
                     new AlertDialog.Builder(AddPlayersActivity.this)
-                            .setTitle("Missing Selection")
-                            .setMessage("Please select a game mode to start the game.")
+                            .setTitle(R.string.missing_selection)
+                            .setMessage(R.string.please_select_a_game_mode_to_start_the_game)
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -64,6 +90,13 @@ public class AddPlayersActivity extends AppCompatActivity {
                             .show();
                     return;
                 }
+                    // Start playing music when the game starts
+                        if (mediaPlayer != null) {
+                            mediaPlayer.start();
+                        }
+
+
+
 
                 String gameMode;
                 if (selectedChipId == R.id.PlayWithComputer) {
@@ -78,8 +111,8 @@ public class AddPlayersActivity extends AppCompatActivity {
                     int selectedDifficultyId = chipGroupDifficulty.getCheckedChipId();
                     if (selectedDifficultyId == -1) {
                         new AlertDialog.Builder(AddPlayersActivity.this)
-                                .setTitle("Missing Selection")
-                                .setMessage("Please select a difficulty level to start the game.")
+                                .setTitle(R.string.missing_selection)
+                                .setMessage(R.string.please_select_a_difficulty_level_to_start_the_game)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -106,9 +139,39 @@ public class AddPlayersActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        languagesBtn.setOnClickListener(v -> showLanguageSelectionDialog());
+
+
+
     }
 
-    public void initView() {
+    private void showLanguageSelectionDialog() {
+        final String[] languages = {"Egypt", "Español", "Français", "China", "Italiano"};
+        final String[] languageCodes = {"ar", "es", "ca", "bo", "de"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.select_a_language);
+        builder.setItems(languages, (dialog, which) -> {
+            // Set the selected language
+            setLocale(languageCodes[which]);
+            // Restart activity to apply the language change
+            recreate();
+        });
+        builder.show();
+    }
+
+    private void setLocale(String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        // Optionally, save the selected language in shared preferences for future use
+    }
+
+        public void initView() {
         playerOne = findViewById(R.id.playerOne);
         playerTwo = findViewById(R.id.playerTwo);
         startGameButton = findViewById(R.id.startGameButton);
@@ -116,5 +179,16 @@ public class AddPlayersActivity extends AppCompatActivity {
         chipPlayWithFriend = findViewById(R.id.PlayWithFriend);
         chipGroup = findViewById(R.id.chipGroupMode);
         chipGroupDifficulty = findViewById(R.id.chipGroupDiffcult);
+         musicBackgroundBtn = findViewById(R.id.music_background);
+        languagesBtn=findViewById(R.id.languages_btn);
+
+//        musicSwitch = findViewById(R.id.musicSwitch);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Release resources when the activity is destroyed
+        MusicManager.release();
     }
 }
