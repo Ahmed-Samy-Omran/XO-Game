@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/lavender"
+    tools:context=".HighScoreActivityActivity">
+
+    <TextView
+        android:id="@+id/high_scores_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="High Scores"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/lobster"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="-9dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@color/white"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHighScores"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/high_score_item"
+
+        />
+
+</LinearLayout>

@@ -37,6 +37,19 @@
         app:layout_constraintBottom_toBottomOf="@+id/music_background"
         app:layout_constraintEnd_toStartOf="@+id/music_background"
         app:layout_constraintTop_toTopOf="@+id/music_background" />
+    <ImageButton
+        android:id="@+id/high_score_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:adjustViewBounds="true"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/high_score"
+        app:layout_constraintBottom_toBottomOf="@+id/languages_btn"
+        app:layout_constraintEnd_toStartOf="@+id/languages_btn"
+        app:layout_constraintTop_toTopOf="@+id/languages_btn" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -94,6 +107,7 @@
                     android:drawableStart="@drawable/ic_xicon"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:inputType="text"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:textColor="@color/lavender" />
@@ -121,6 +135,8 @@
                     android:drawableStart="@drawable/ic_oicon"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:inputType="text"
+
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:textColor="@color/lavender" />

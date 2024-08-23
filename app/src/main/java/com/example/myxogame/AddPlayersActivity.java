@@ -29,7 +29,7 @@ public class AddPlayersActivity extends AppCompatActivity {
     private Chip chipPlayWithFriend;
     private ChipGroup chipGroup, chipGroupDifficulty;
     private SwitchMaterial musicSwitch;
-    ImageButton musicBackgroundBtn, languagesBtn;
+    ImageButton musicBackgroundBtn, languagesBtn,highScoreBtn;
     boolean isSoundOn;
     ProgressBar progressBar;
         MediaPlayer mediaPlayer;
@@ -39,6 +39,16 @@ public class AddPlayersActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_players);
         initView();
+
+        highScoreBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(AddPlayersActivity.this, HighScoreActivityActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
 
         mediaPlayer = MediaPlayer.create(this, R.raw.game_start);
 
@@ -181,6 +191,8 @@ public class AddPlayersActivity extends AppCompatActivity {
         chipGroupDifficulty = findViewById(R.id.chipGroupDiffcult);
          musicBackgroundBtn = findViewById(R.id.music_background);
         languagesBtn=findViewById(R.id.languages_btn);
+
+            highScoreBtn=findViewById(R.id.high_score_btn);
 
 //        musicSwitch = findViewById(R.id.musicSwitch);
     }
