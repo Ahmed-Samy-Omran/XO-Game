@@ -15,6 +15,7 @@
     <string name="player_one">Joueur Un</string>
     <string name="player_two">Joueur Deux</string>
     <string name="results">Résultats</string>
+    <string name="high_scores">Meilleurs Scores</string>
     <string name="start_again">Recommencer</string>
     <string name="please_enter_both_player_names_to_start_the_game">Veuillez entrer les noms des deux joueurs pour commencer le jeu.</string>
     <string name="missing_information">Informations manquantes</string>
@@ -24,4 +25,6 @@
     <string name="select_a_language">Sélectionner une langue</string>
     <string name="is_a_winner"> est un gagnant !</string>
     <string name="match_draw">Match nul</string>
+    <string name="click_sound">Son de clic</string>
+
 </resources>

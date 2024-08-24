@@ -1,11 +1,13 @@
 package com.example.myxogame;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -25,9 +27,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int[] boxPositions = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     private int playerTurn = 1;
     private int totalSelectedBoxes = 1;
+//    private Switch soundSwitch;
     private boolean playWithComputer = false;
     private String difficultyLevel;
-    MediaPlayer mediaPlayerWon, mediaPlayerDraw;
+    MediaPlayer mediaPlayerWon, mediaPlayerDraw,mediaPlayerClick;
+    private boolean isClickSoundOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +41,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+//                // Load and apply the current sound setting
+//        soundSwitch = findViewById(R.id.soundSwitch);
+//        SharedPreferences preferences = getSharedPreferences("game_settings", MODE_PRIVATE);
+//        isClickSoundOn = preferences.getBoolean("sound_on", true);
+//        boolean isClickSoundOn = preferences.getBoolean("sound_on", true);
+//        soundSwitch.setChecked(isClickSoundOn);
+//        soundSwitch.setText(isClickSoundOn ? "Sound On" : "Sound Off");
+//
+//        soundSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putBoolean("sound_on", isChecked);
+//            editor.apply();
+//            soundSwitch.setText(isChecked ? "Sound On" : "Sound Off");
+//        });
+
+//        // Initialize soundSwitch after setting content view
+//        soundSwitch = findViewById(R.id.soundSwitch);
+//
+//        // Load the sound preference
+//        SharedPreferences preferences = getSharedPreferences("game_settings", MODE_PRIVATE);
+//        isClickSoundOn = preferences.getBoolean("sound_on", true);
+//
+//        soundSwitch.setChecked(isClickSoundOn);
+//        soundSwitch.setText(isClickSoundOn ? "Sound On" : "Sound Off");
+//
+//        soundSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putBoolean("sound_on", isChecked);
+//            editor.apply();
+//            soundSwitch.setText(isChecked ? "Sound On" : "Sound Off");
+//        });
+
+
         initializeGameSetup();
+//        setupSoundSwitch();
         setupClickListeners();
     }
+
+//    private void setupSoundSwitch() {
+//        soundSwitch = findViewById(R.id.soundSwitch);
+//
+//        // Load the current sound preference
+//        SharedPreferences preferences = getSharedPreferences("game_settings", MODE_PRIVATE);
+//        isClickSoundOn = preferences.getBoolean("sound_on", true); // Default is sound on
+//
+//        // Set the switch state based on the current sound setting
+//        soundSwitch.setChecked(isClickSoundOn);
+//        soundSwitch.setText(isClickSoundOn ? "Sound On" : "Sound Off");
+//
+//        // Handle the sound switch toggle
+//        soundSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            isClickSoundOn = isChecked;
+//            // Save the new sound preference
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putBoolean("sound_on", isClickSoundOn);
+//            editor.apply();
+//            // Update the switch text based on the new status
+//            soundSwitch.setText(isClickSoundOn ? "Sound On" : "Sound Off");
+//        });
+//    }
+
 
     private void initializeGameSetup() {
         updateScores();
@@ -60,6 +122,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mediaPlayerWon = MediaPlayer.create(this, R.raw.adelshakel);
         mediaPlayerDraw = MediaPlayer.create(this, R.raw.draw);
+        mediaPlayerClick = MediaPlayer.create(this, R.raw.click);
+
+        // Load the sound preference
+        SharedPreferences preferences = getSharedPreferences("game_settings", MODE_PRIVATE);
+        isClickSoundOn = preferences.getBoolean("sound_on", true);
+//        soundSwitch = findViewById(R.id.soundSwitch);
 
         binding.playerOneName.setText(getPlayerOneName != null ? getPlayerOneName : getString(R.string.player_one));
         binding.playerTwoName.setText(getPlayerTwoName != null ? getPlayerTwoName : getString(R.string.player_two));
@@ -74,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View.OnClickListener boxClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isClickSoundOn) {
+                    // Play the click sound when a box is clicked
+                    playSound(mediaPlayerClick);
+                }
+
+
                 int position = getPositionForView(view);
                 if (position != -1 && isBoxSelectable(position)) {
                     performAction((ImageView) view, position);
@@ -90,6 +164,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.image7.setOnClickListener(boxClickListener);
         binding.image8.setOnClickListener(boxClickListener);
         binding.image9.setOnClickListener(boxClickListener);
+    }
+    private void playSound(MediaPlayer mediaPlayer) {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.seekTo(0); // Reset to the beginning if it's already playing
+            }
+            mediaPlayer.start();
+        }
+    }
+
+    // Release resources when the activity is destroyed
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayerClick != null) mediaPlayerClick.release();
+        if (mediaPlayerWon != null) mediaPlayerWon.release();
+        if (mediaPlayerDraw != null) mediaPlayerDraw.release();
     }
 
     private int getPositionForView(View view) {
@@ -285,4 +376,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
+
 }

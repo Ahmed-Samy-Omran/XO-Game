@@ -16,6 +16,8 @@
     <string name="player_two">Jugador Dos</string>
     <string name="results">Resultados</string>
     <string name="start_again">Empezar de nuevo</string>
+    <string name="high_scores">Puntuaciones Altas</string>
+
     <string name="please_enter_both_player_names_to_start_the_game">Por favor, ingresa los nombres de ambos jugadores para comenzar el juego.</string>
     <string name="missing_information">Información faltante</string>
     <string name="missing_selection">Selección faltante</string>
@@ -24,4 +26,5 @@
     <string name="select_a_language">Seleccionar un idioma</string>
     <string name="is_a_winner"> es un ganador!</string>
     <string name="match_draw">Empate</string>
+    <string name="click_sound">Sonido de clic</string>
 </resources>

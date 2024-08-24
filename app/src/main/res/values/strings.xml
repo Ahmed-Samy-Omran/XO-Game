@@ -23,4 +23,6 @@
     <string name="select_a_language">Select a Language</string>
     <string name="is_a_winner">" is a Winner!"</string>
     <string name="match_draw">Match Draw</string>
+    <string name="high_scores">High Scores</string>
+    <string name="click_sound">Click Sound</string>
 </resources>

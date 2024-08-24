@@ -14,7 +14,7 @@
         android:id="@+id/high_scores_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="High Scores"
+        android:text="@string/high_scores"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:layout_marginTop="10dp"

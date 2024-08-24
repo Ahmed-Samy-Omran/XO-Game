@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lobster"
         android:layout_weight="1"
+        android:gravity="left"
         android:textSize="18sp" />
 
     <TextView
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:fontFamily="@font/lobster"
+        android:gravity="right"
         android:textSize="18sp" />
 
 

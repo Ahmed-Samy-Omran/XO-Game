@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,20 +27,24 @@ import java.util.Locale;
 public class AddPlayersActivity extends AppCompatActivity {
     EditText playerOne, playerTwo;
     Button startGameButton;
+    private Switch soundSwitch;
+    private SharedPreferences preferences;
     private Chip chipPlayWithComputer;
     private Chip chipPlayWithFriend;
     private ChipGroup chipGroup, chipGroupDifficulty;
-    private SwitchMaterial musicSwitch;
+
     ImageButton musicBackgroundBtn, languagesBtn,highScoreBtn;
-    boolean isSoundOn;
-    ProgressBar progressBar;
-        MediaPlayer mediaPlayer;
+    boolean isSoundOn,isClickSoundOn;
+    MediaPlayer mediaPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_players);
         initView();
+        setupSoundSwitch();
+
+
 
         highScoreBtn.setOnClickListener(
                 new View.OnClickListener() {
@@ -52,7 +58,7 @@ public class AddPlayersActivity extends AppCompatActivity {
 
         mediaPlayer = MediaPlayer.create(this, R.raw.game_start);
 
-         isSoundOn = false;
+        isSoundOn = false;
         musicBackgroundBtn.setImageResource(R.drawable.volume_off); // Default icon (sound off)
 
         musicBackgroundBtn.setOnClickListener(v -> {
@@ -63,7 +69,7 @@ public class AddPlayersActivity extends AppCompatActivity {
                 musicBackgroundBtn.setImageResource(R.drawable.sound_on);
                 MusicManager.playMusic(AddPlayersActivity.this);
             }
-            isSoundOn = !isSoundOn; 
+            isSoundOn = !isSoundOn;
         });
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +106,10 @@ public class AddPlayersActivity extends AppCompatActivity {
                             .show();
                     return;
                 }
-                    // Start playing music when the game starts
-                        if (mediaPlayer != null) {
-                            mediaPlayer.start();
-                        }
+                // Start playing music when the game starts
+                if (mediaPlayer != null) {
+                    mediaPlayer.start();
+                }
 
 
 
@@ -156,6 +162,25 @@ public class AddPlayersActivity extends AppCompatActivity {
 
     }
 
+    private void setupSoundSwitch() {
+        soundSwitch = findViewById(R.id.soundSwitch);
+
+        // Load the current sound preference
+        SharedPreferences preferences = getSharedPreferences("game_settings", MODE_PRIVATE);
+        isClickSoundOn = preferences.getBoolean("sound_on", true);
+
+        soundSwitch.setChecked(isClickSoundOn);
+        soundSwitch.setText(isClickSoundOn ? "Sound On" : "Sound Off");
+
+        soundSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("sound_on", isChecked);
+            editor.apply();
+            soundSwitch.setText(isChecked ? "Sound On" : "Sound Off");
+        });
+    }
+
+
     private void showLanguageSelectionDialog() {
         final String[] languages = {"Egypt", "Español", "Français", "China", "Italiano"};
         final String[] languageCodes = {"ar", "es", "ca", "bo", "de"};
@@ -181,7 +206,7 @@ public class AddPlayersActivity extends AppCompatActivity {
         // Optionally, save the selected language in shared preferences for future use
     }
 
-        public void initView() {
+    public void initView() {
         playerOne = findViewById(R.id.playerOne);
         playerTwo = findViewById(R.id.playerTwo);
         startGameButton = findViewById(R.id.startGameButton);
@@ -189,10 +214,12 @@ public class AddPlayersActivity extends AppCompatActivity {
         chipPlayWithFriend = findViewById(R.id.PlayWithFriend);
         chipGroup = findViewById(R.id.chipGroupMode);
         chipGroupDifficulty = findViewById(R.id.chipGroupDiffcult);
-         musicBackgroundBtn = findViewById(R.id.music_background);
+        musicBackgroundBtn = findViewById(R.id.music_background);
         languagesBtn=findViewById(R.id.languages_btn);
 
-            highScoreBtn=findViewById(R.id.high_score_btn);
+        highScoreBtn=findViewById(R.id.high_score_btn);
+        soundSwitch = findViewById(R.id.soundSwitch);
+        preferences = getSharedPreferences("game_settings", MODE_PRIVATE);
 
 //        musicSwitch = findViewById(R.id.musicSwitch);
     }

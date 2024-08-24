@@ -24,5 +24,8 @@
     <string name="select_a_language">选择语言</string>
     <string name="is_a_winner"> 是赢家！</string>
     <string name="match_draw">平局</string>
+    <string name="high_scores">最高分数</string>
+    <string name="click_sound">点击声音</string>
+
 
 </resources>
